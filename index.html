@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E & P</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <style>
+      * {
+          font-family: Consolas;
+      }
+  </style>
+</head>
+<script>
+     const makePNs = (p, prh, plh, at, date) => {
+            const setID = p + '-set';
+            var setElement = document.getElementById(setID);
+            var setText = setElement.innerText;
+            
+            var pn1ID = p + '-pn1'
+            var pn2ID = p + '-pn2'
+
+            if(at !== 'NA') { 
+                document.getElementById(p + '-at').innerHTML = 'Tube: ' + at;
+            } else {
+                document.getElementById(p + '-at').className = 'd-none'
+                document.getElementById(p + '-cb').className = 'col-auto ms-auto'
+            }
+
+            if(setText !== 'Each') {
+                var pn1 = document.getElementById(pn1ID);
+                var pn2 = document.getElementById(pn2ID);
+                pn1.innerText = prh;
+                pn2.innerText = plh;
+                document.getElementById('pn').innerText = 'PNs: ';
+               
+            } else {
+                var pn1 = document.getElementById(pn1ID);
+                var pn2 = document.getElementById(pn2ID);
+                pn1.innerText = p;
+                pn2.innerText = '';
+                document.getElementById('pn').innerText = 'PN: ';
+            }
+            var year = date.match(/^\d{4}/)
+            var month = date.match(/^\d{4}(\d{2})\d{2}$/)
+            var day = date.match(/\d{2}$/)
+            document.getElementById(p + '-date').innerHTML = 'Due: ' + month[1] + '/' + day + '/' + year;
+        }
+</script>
+
+  <body class="">
+    <div class="w-100 bg-dark mb-5 text-white p-3 position-fixed top-0" style="z-index: 1200;">
+        <div class="row">
+            <div class="col">J00132456-0</div> <!--JOB-->
+            <div class="col text-center fs-4">2023 SANDSTORM</div> <!--PROGRAM-->
+            <div class="col text-end">Robb Svoboda</div><!--CSR-->
+        </div>
+        <div class="row">
+            <div class="col">RH(RH) LH(LH)</div><!--DESIGNATION-->
+            <div id ='FR-22-12345A-date' class="col text-center">Due: 05/31</div><!--DATE-->
+            <div class="col text-end">Forest River</div><!--PROGRAM-->
+        </div>
+    </div>
+
+
+<div style="margin-top: 7%;">
+    <div class="card m-3" id="FR-22-12345A-card"><!--JOB-->
+        <div class="card-header">
+            <div class="row">
+                <div id='FR-22-12345A-doc' class="ms-2 col-auto fs-3 border border-3 rounded">
+                    #14<!--DOC-->
+                </div>
+                <div class="ms-2 col-auto fs-3 border border-3 rounded" style="user-select: all;">
+                    22-12345A<!--FILE-->
+                </div>
+                <div id='FR-22-12345A-set' class="ms-2 col-auto fs-3 border border-3 rounded">
+                    Each<!--S/EACH-->
+                </div>
+                <div id='FR-22-12345A-at' class="ms-auto col-auto fs-3 border border-3 rounded">
+                    D1127<!--TUBE-->
+                </div>
+                <div id='FR-22-12345A-cb' class="col-auto"><!--JOB-->
+                    <div>
+                        <input class="form-check-input fs-2 text-end" type="checkbox" value="" id="FR-22-12345A-check" onclick="complete('FR-22-12345A')"><!--JOB-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body fs-5" id="FR-22-12345A-body"><!--JOB-->
+            <div class="row">
+                <div class="col-2 text-muted">Processes: </div>
+                <div class="col-auto">(P3098VS-48) - KISS CUT, WEED, PREMASK, THRU CUT</div><!--PROCESSES-->
+            </div>
+            <div class="row">
+                <div class="col-2 text-muted">Description: </div>
+                <div class="col-auto">SANDSTORM, SIDE DIE CUT #12</div><!--DESCRIPTION-->
+            </div>
+            
+            <div class="row">
+                <div id='pn' class="col-2 text-muted disabled">PN(s): </div>
+                <div class="col-auto" style="user-select: all;">
+                    <span id="FR-22-12345A-pn1" class="row px-3">f</span><!--JOB-->
+                    <span id="FR-22-12345A-pn2" class="row px-3">f</span><!--JOB-->
+                </div>
+                <script type="text/javascript">
+                    makePNs('FR-22-12345A','FR-22-12345A-RH','FR-22-12345A-LH', 'asdfasdf', '20200512');
+                </script><!--JOB-->
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+
+
+    <script>
+        const complete = pn => {
+            const checkboxID = pn + '-check';
+            
+            var checkbox = document.getElementById(checkboxID);
+            var card = document.getElementById(pn + '-card');
+
+            if(checkbox.checked === true) {
+                card.style.background = 'gray';
+                document.getElementById(pn + '-doc').className = 'ms-2 col-auto fs-3';
+                document.getElementById(pn + '-set').className = 'ms-2 col-auto fs-3';
+                document.getElementById(pn + '-body').className = 'card-body fs-5 d-none';
+            } else {
+                card.style.background = 'none';
+                document.getElementById(pn + '-doc').className = 'ms-2 col-auto fs-3 border border-3 rounded';
+                document.getElementById(pn + '-set').className = 'ms-2 col-auto fs-3 border border-3 rounded';
+                document.getElementById(pn + '-body').className = 'card-body fs-5';
+            }
+        }
+       
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
