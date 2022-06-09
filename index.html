@@ -1,143 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E & P</title>
-    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-  <style>
-      * {
-          font-family: Consolas;
-      }
-  </style>
-</head>
-<script>
-     const makePNs = (p, prh, plh, at, date) => {
-            const setID = p + '-set';
-            var setElement = document.getElementById(setID);
-            var setText = setElement.innerText;
-            
-            var pn1ID = p + '-pn1'
-            var pn2ID = p + '-pn2'
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-            if(at !== 'NA') { 
-                document.getElementById(p + '-at').innerHTML = 'Tube: ' + at;
-            } else {
-                document.getElementById(p + '-at').className = 'd-none'
-                document.getElementById(p + '-cb').className = 'col-auto ms-auto'
-            }
-
-            if(setText !== 'Each') {
-                var pn1 = document.getElementById(pn1ID);
-                var pn2 = document.getElementById(pn2ID);
-                pn1.innerText = prh;
-                pn2.innerText = plh;
-                document.getElementById('pn').innerText = 'PNs: ';
-               
-            } else {
-                var pn1 = document.getElementById(pn1ID);
-                var pn2 = document.getElementById(pn2ID);
-                pn1.innerText = p;
-                pn2.innerText = '';
-                document.getElementById('pn').innerText = 'PN: ';
-            }
-            var year = date.match(/^\d{4}/)
-            var month = date.match(/^\d{4}(\d{2})\d{2}$/)
-            var day = date.match(/\d{2}$/)
-            document.getElementById(p + '-date').innerHTML = 'Due: ' + month[1] + '/' + day + '/' + year;
+    <script type="text/javascript" src="PartList.js"></script>
+    <style>
+        *{
+            font-family: Consolas;
         }
-</script>
+    </style>
+</head>
+<body>
+    <div id="root">
 
-  <body class="">
-    <div class="w-100 bg-dark mb-5 text-white p-3 position-fixed top-0" style="z-index: 1200;">
-        <div class="row">
-            <div class="col">J00132456-0</div> <!--JOB-->
-            <div class="col text-center fs-4">2023 SANDSTORM</div> <!--PROGRAM-->
-            <div class="col text-end">Robb Svoboda</div><!--CSR-->
-        </div>
-        <div class="row">
-            <div class="col">RH(RH) LH(LH)</div><!--DESIGNATION-->
-            <div id ='FR-22-12345A-date' class="col text-center">Due: 05/31</div><!--DATE-->
-            <div class="col text-end">Forest River</div><!--PROGRAM-->
-        </div>
     </div>
 
+    <script type="text/babel">
+        const Part = ({ part, collapse, complete, showAll }) => {
+            return(
+                    <div className={`card m-3 ${!part.closed ? 'border-primary' : ''}`} id="FR-22-12345A-card">
+                        <div onClick={() => collapse(part.DOC)} className={`card-header ${part.completed ? 'bg-warning' : ''}`}>
+                            <div className="row">
+                                <div id='FR-22-12345A-doc' className="ms-2 col-auto fs-3 border border-3 rounded">
+                                    {
+                                        '#' + part.DOC
+                                    }
+                                </div>
+                                <div className="ms-2 col-auto fs-3 border border-3 rounded">
+                                    {
+                                        part.file
+                                    }
+                                </div>
+                                <div id='FR-22-12345A-set' className="ms-2 col-auto fs-3 border border-3 rounded">
+                                    {
+                                        part["EA-SET"]
+                                    }
+                                </div>
+                                
+                                    {
+                                        part.ARTTUBE === "NA" ? null :  
+                                        <div id='FR-22-12345A-at' className="ms-auto col-auto fs-3 border border-3 rounded">
+                                            {
+                                                part.ARTTUBE
+                                            }
+                                        </div>
+                                    }
+                                {
+                                    part.ARTTUBE === "NA" ? 
+                                    <div id='FR-22-12345A-cb' className="col-auto ms-auto">
+                                        <div>
+                                            <input className="form-check-input fs-2 text-end me-1" 
+                                            type="checkbox" value="" id="FR-22-12345A-check" onChange={() => complete(part.DOC)} checked={part.completed}></input>
+                                        </div>
+                                    </div>
+                                 :
+                                    <div id='FR-22-12345A-cb' className="col-auto">
+                                        <div>
+                                            <input className="form-check-input fs-2 text-end me-1" 
+                                            type="checkbox" value="" id="FR-22-12345A-check" onChange={() => complete(part.DOC)} checked={part.completed}></input>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+                        </div>
 
-<div style="margin-top: 7%;">
-    <div class="card m-3" id="FR-22-12345A-card"><!--JOB-->
-        <div class="card-header">
-            <div class="row">
-                <div id='FR-22-12345A-doc' class="ms-2 col-auto fs-3 border border-3 rounded">
-                    #14<!--DOC-->
-                </div>
-                <div class="ms-2 col-auto fs-3 border border-3 rounded" style="user-select: all;">
-                    22-12345A<!--FILE-->
-                </div>
-                <div id='FR-22-12345A-set' class="ms-2 col-auto fs-3 border border-3 rounded">
-                    Each<!--S/EACH-->
-                </div>
-                <div id='FR-22-12345A-at' class="ms-auto col-auto fs-3 border border-3 rounded">
-                    D1127<!--TUBE-->
-                </div>
-                <div id='FR-22-12345A-cb' class="col-auto"><!--JOB-->
-                    <div>
-                        <input class="form-check-input fs-2 text-end" type="checkbox" value="" id="FR-22-12345A-check" onclick="complete('FR-22-12345A')"><!--JOB-->
+                        <div className={`card-body fs-5 ${part.closed ? 'd-none' : ''}`} id="FR-22-12345A-body">
+                            <div className="row">
+                                <div className="col-2 text-muted">Processes: </div>
+                                <div className="col-auto">{part.PROCESS}</div>
+                            </div>
+                            <div className="row">
+                                <div className="col-2 text-muted">Description: </div>
+                                <div className="col-auto">{part.PARTNAME}</div>
+                            </div>
+                            
+                            <div className="row">
+                                <div id='pn' className="col-2 text-muted disabled">PN(s): </div>
+                                <div className="col-auto"style={{userSelect: 'all'}}>
+                                    {
+                                        part["EA-SET"] !== "Each" ? 
+                                        <div>
+                                            <span className="row px-3" >{part.PTRH}</span>
+                                            <span className="row px-3">{part.PTLH}</span>
+                                        </div> : 
+                                        <span className="row px-3">{part.PTEA}</span>
+                                    }
+                                    
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            )
+        }
+
+        const Search = ({ setSearch }) => (
+            <div className='col-4 text-start mt-1'>
+                <input 
+                id='search'
+                className='form-control'
+                type='search'
+                placeholder='Type a PN number you dopus' 
+                onChange={e => setSearch(e.target.value)}
+                /> 
+            </div>
+        );
+        
+        const FilterButton = ({ handleChange, filteredBy, filterBy}) => (
+                <button className={`btn me-1 text-white ${filteredBy === filterBy ? 'btn-primary': ''}`} onClick={() => handleChange(filterBy)}>{filterBy}</button>
+        )
+        
+
+        const JobBar = ({ children, searchChange, jobData }) => {
+            return (
+                <div className="w-100 bg-dark mb-5 text-white p-3 position-fixed top-0" style={{zIndex: '1200'}}>
+                    <div className="row">
+                        <div className='col-4'>
+                            {children}
+                        </div>
+                        <div className="col text-center fs-4">{jobData.DESC}</div> 
+                        <div className="col text-end">
+                            {jobData.CSR}<br></br>
+                            {jobData.JOBNO}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <Search setSearch={searchChange}/>
+                        <div id ='FR-22-12345A-date' className="col text-center">Due: {jobData.DATE}</div>
+                        <div className="col text-end">Forest River<br></br>Designation: TBA</div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="card-body fs-5" id="FR-22-12345A-body"><!--JOB-->
-            <div class="row">
-                <div class="col-2 text-muted">Processes: </div>
-                <div class="col-auto">(P3098VS-48) - KISS CUT, WEED, PREMASK, THRU CUT</div><!--PROCESSES-->
-            </div>
-            <div class="row">
-                <div class="col-2 text-muted">Description: </div>
-                <div class="col-auto">SANDSTORM, SIDE DIE CUT #12</div><!--DESCRIPTION-->
-            </div>
-            
-            <div class="row">
-                <div id='pn' class="col-2 text-muted disabled">PN(s): </div>
-                <div class="col-auto" style="user-select: all;">
-                    <span id="FR-22-12345A-pn1" class="row px-3">f</span><!--JOB-->
-                    <span id="FR-22-12345A-pn2" class="row px-3">f</span><!--JOB-->
-                </div>
-                <script type="text/javascript">
-                    makePNs('FR-22-12345A','FR-22-12345A-RH','FR-22-12345A-LH', 'asdfasdf', '20200512');
-                </script><!--JOB-->
-            </div>
-        </div>
-
-    </div>
-    
-</div>
-
-
-
-    <script>
-        const complete = pn => {
-            const checkboxID = pn + '-check';
-            
-            var checkbox = document.getElementById(checkboxID);
-            var card = document.getElementById(pn + '-card');
-
-            if(checkbox.checked === true) {
-                card.style.background = 'gray';
-                document.getElementById(pn + '-doc').className = 'ms-2 col-auto fs-3';
-                document.getElementById(pn + '-set').className = 'ms-2 col-auto fs-3';
-                document.getElementById(pn + '-body').className = 'card-body fs-5 d-none';
-            } else {
-                card.style.background = 'none';
-                document.getElementById(pn + '-doc').className = 'ms-2 col-auto fs-3 border border-3 rounded';
-                document.getElementById(pn + '-set').className = 'ms-2 col-auto fs-3 border border-3 rounded';
-                document.getElementById(pn + '-body').className = 'card-body fs-5';
-            }
+            );
         }
-       
+
+
+        const App = () => {
+            const [parts, setParts] = React.useState();
+            const [job, setJob] = React.useState();
+            const [searchParam, setSearchParam] = React.useState('');
+            const [filteredParts, setFilteredParts] = React.useState([]);
+            const [filteredFinalParts, setFilteredFinalParts] = React.useState([]);
+            const [showFilter, setShowFilter] = React.useState('All');
+            const [allShown, setAllShown] = React.useState(false);
+            const handleSearchParamChange = v => {
+                setSearchParam(v);
+            }
+
+            const handleShowFilterChange = v => {
+                setShowFilter(v);
+            }
+
+            const handleCollapseUpdate = d => {
+                const alt = parts.map(p => {
+                    if(p.DOC === d) {
+                        p.closed = !p.closed
+                        return p
+                    } else {
+                        return p
+                    }
+                });
+                setParts(alt);
+            }
+
+            const handleCompleteChange = d => {
+                const alt = parts.map(p => {
+                    if(p.DOC === d) {
+                        p.completed = !p.completed;
+                        p.closed = true;
+                        return p
+                    } else {
+                        return p
+                    }
+                });
+                const sorted = alt.map((p, i) => {
+                    if(p.completed) {
+                        alt.splice(i, 1);
+                        alt.push(p);
+                    }
+                }) ;
+                setParts(alt);
+            }
+
+            const handleShowAll = () => {
+                if (!allShown) {
+                    setAllShown(true);
+                    const altered = parts.map(p => {
+                        p.closed = false;
+                        return p;
+                    });
+                    setParts(altered);
+                } else {
+                    setAllShown(false);
+                    const altered = parts.map(p => {
+                        p.closed = true;
+                        return p;
+                    });
+                    setParts(altered);
+                }
+                
+            }
+
+            React.useEffect(() => {
+                var altered = data.PARTS.PART.map(p => {
+                    p.closed = true;
+                    p.completed = false;
+                    return p;
+                });
+                setParts(altered);
+                const date = data.PARTS.JOB.DATE.toString();
+                var year = date.match(/^\d{4}/);
+                var month = date.match(/^\d{4}(\d{2})\d{2}$/);
+                var day = date.match(/\d{2}$/);
+                data.PARTS.JOB.DATE = month[1] + '/' + day + '/' + year;
+                setJob(data.PARTS.JOB);
+            }, []);
+
+            React.useEffect(() => {
+                if(parts && searchParam !== '') {
+                    const filtered = parts.filter(p => p.PTEA.toString().includes(searchParam));
+                    setFilteredParts(filtered);
+                } else {
+                    setFilteredParts(parts);
+                }
+            }, [parts, searchParam, showFilter]);
+
+            React.useEffect(() => {
+                if(filteredParts) {
+                    if (showFilter === 'All') {
+                        setFilteredFinalParts(filteredParts);
+                    } else  if (showFilter === 'Printed') {
+                        const filtered = filteredParts.filter(p => p.ARTTUBE !== 'NA');
+                        setFilteredFinalParts(filtered);
+                        return
+                    } else if (showFilter === 'Film') {
+                        const filtered = filteredParts.filter(p => p.ARTTUBE === 'NA');
+                        setFilteredFinalParts(filtered);
+                        return
+                    }
+                }
+                
+            }, [parts, showFilter, filteredParts]);
+
+            return  (
+                <div>
+                    {
+                        job ? <JobBar searchChange={handleSearchParamChange} jobData={job}>
+                        <button className='btn btn-warning me-1' onClick={() => handleShowAll()}>Show / Hide All</button>
+                        <FilterButton filteredBy={showFilter} handleChange={handleShowFilterChange} filterBy={'All'}/>
+                        <FilterButton filteredBy={showFilter} handleChange={handleShowFilterChange} filterBy={'Printed'}/>
+                        <FilterButton filteredBy={showFilter} handleChange={handleShowFilterChange} filterBy={'Film'}/>
+                    </JobBar> : '' 
+                    }
+                    <div style={{marginTop: '7%'}}>
+                            {
+                                filteredFinalParts ? filteredFinalParts.map(p => 
+                                    <Part key={p.DOC} 
+                                        complete={handleCompleteChange} 
+                                        collapse={handleCollapseUpdate} 
+                                        part={p}/>
+                                    ) 
+                                    : 
+                                    ''
+                            }
+                        </div> 
+            </div>
+            )
+        }
+                
+        const domContainer = document.getElementById('root');
+        const root = ReactDOM.createRoot(domContainer);
+        root.render(
+                <App />
+            );
 
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-  </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
 </html>
